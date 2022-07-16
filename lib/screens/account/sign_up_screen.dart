@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  final Function(bool isLogin, String? userId) setLogin;
-  const LoginScreen({Key? key, required this.setLogin}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  static const routeName = '/SignUpScreen';
+  const SignUpScreen({Key? key}) : super(key: key);
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
 
   final _idTextEditingController = TextEditingController();
   final _pwdTextEditingController = TextEditingController();
@@ -18,24 +18,35 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _idTextEditingController.dispose();
-    _pwdTextEditingController.dispose();
+  Future<void> _showDialog() async { 
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Alert Dialog title"),
+          content: const Text("Alert Dialog body"),
+          actions: <Widget>[ 
+            TextButton(
+              child: const Text("Close"),
+              onPressed: () {
+                Navigator.popUntil(context, (route) => route.isFirst);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
-  Future<void> onPressLoginBtn() async {
-    if (_idTextEditingController.text.isNotEmpty) {
-      widget.setLogin(true, _idTextEditingController.text);
-    }
+  Future<void> _onPressSignUpBtn() async {
+    await _showDialog();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Login Screen"),
+        title: const Text("SignUp Screen"),
       ),
       body: SizedBox(
         width: double.infinity,
@@ -67,8 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
           OutlinedButton(
-            onPressed: onPressLoginBtn,
-            child: const Text("로그인"),
+            onPressed: _onPressSignUpBtn,
+            child: const Text("가입"),
           )
         ],
       ),

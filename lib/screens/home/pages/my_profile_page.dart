@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class MyProfilePage extends StatelessWidget {
-  final Function(bool isLogin, String? userId) setLogin;
-  const MyProfilePage({Key? key, required this.setLogin}) : super(key: key);
+  final Function(bool isSignIn, String? userId) setSignIn;
+  const MyProfilePage({Key? key, required this.setSignIn}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,7 @@ class MyProfilePage extends StatelessWidget {
           children: [
             const Text("로그아웃"),
             OutlinedButton(
-              onPressed: () { setLogin(false, null); },
+              onPressed: () { setSignIn(false, null); },
               child: const Text("로그아웃"),
             )
           ],

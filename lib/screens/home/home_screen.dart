@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:unicorn_app/screens/home/pages/my_profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
-  final Function(bool isLogin, String? userId) setLogin;
-  const HomeScreen({Key? key, required this.setLogin}) : super(key: key);
+  static const routeName = '/HomeScreen';
+  final Function(bool isSignIn, String? userId) setSignIn;
+  const HomeScreen({Key? key, required this.setSignIn}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -13,7 +14,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final List<Widget> _bodyWidgets = [
     const Text('Search'),
     const Text('Home'),
-    MyProfilePage(setLogin: widget.setLogin),
+    MyProfilePage(setSignIn: widget.setSignIn),
   ];
 
   int _currentBottomNavBarIndex = 1;
@@ -21,10 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> onPressLogoutBtn() async {
-    widget.setLogin(false, null);
   }
 
   @override
