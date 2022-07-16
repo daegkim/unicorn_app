@@ -1,17 +1,19 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicorn_app/screens/account/sign_up_screen.dart';
 
 class SignInScreen extends StatefulWidget {
   static const routeName = '/SignInScreen';
-  final Function(bool isSignIn, String? userId) setSignIn;
-  const SignInScreen({Key? key, required this.setSignIn}) : super(key: key);
+  const SignInScreen({Key? key}) : super(key: key);
 
   @override
   State<SignInScreen> createState() => _SignInScreenState();
 }
 
 class _SignInScreenState extends State<SignInScreen> {
-
+  Future<SharedPreferences> sharedPreferences = SharedPreferences.getInstance();
   final _idTextEditingController = TextEditingController();
   final _pwdTextEditingController = TextEditingController();
 
@@ -29,18 +31,25 @@ class _SignInScreenState extends State<SignInScreen> {
 
   Future<void> _onPressSignInBtn() async {
     if (_idTextEditingController.text.isNotEmpty) {
-      widget.setSignIn(true, _idTextEditingController.text);
+      SharedPreferences sPreferences = (await sharedPreferences);
+      sPreferences.setString("UNICORN_USER_ID", _idTextEditingController.text);
+      if (!mounted) {
+        sPreferences.remove("UNICORN_USER_ID");
+        return;
+      }
+      await Navigator.pushNamedAndRemoveUntil(context, "/home", (route) => false);
     }
   }
   
   void _clearInputs() {
-    _idTextEditingController.text = "";
-    _pwdTextEditingController.text = "";
+    FocusScope.of(context).unfocus();
+    _idTextEditingController.clear();
+    _pwdTextEditingController.clear();
   }
 
-  void _onPressSignUpBtn() {
+  void _onPressSignUpBtn() async {
     _clearInputs();
-    Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+    await Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
   }
 
   @override

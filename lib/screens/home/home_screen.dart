@@ -3,8 +3,7 @@ import 'package:unicorn_app/screens/home/pages/my_profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
   static const routeName = '/HomeScreen';
-  final Function(bool isSignIn, String? userId) setSignIn;
-  const HomeScreen({Key? key, required this.setSignIn}) : super(key: key);
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -14,7 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   late final List<Widget> _bodyWidgets = [
     const Text('Search'),
     const Text('Home'),
-    MyProfilePage(setSignIn: widget.setSignIn),
+    const MyProfilePage(),
   ];
 
   int _currentBottomNavBarIndex = 1;

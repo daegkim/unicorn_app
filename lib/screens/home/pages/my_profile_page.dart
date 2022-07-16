@@ -1,8 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class MyProfilePage extends StatelessWidget {
-  final Function(bool isSignIn, String? userId) setSignIn;
-  const MyProfilePage({Key? key, required this.setSignIn}) : super(key: key);
+class MyProfilePage extends StatefulWidget {
+  const MyProfilePage({Key? key}) : super(key: key);
+
+  @override
+  State<MyProfilePage> createState() => _MyProfilePageState();
+}
+
+class _MyProfilePageState extends State<MyProfilePage> {
+  Future<SharedPreferences> sharedPreferences = SharedPreferences.getInstance();
+  
+  Future<void> onPressSignOutBtn() async {
+    SharedPreferences sPreferences = (await sharedPreferences);
+    String? userId = sPreferences.getString("UNICORN_USER_ID");
+    sPreferences.remove("UNICORN_USER_ID");
+    if (!mounted) {
+      if (userId != null) sPreferences.setString("UNICORN_USER_ID", userId);
+      return;
+    }
+    await Navigator.pushNamedAndRemoveUntil(context, "/signin", (route) => false);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +33,7 @@ class MyProfilePage extends StatelessWidget {
           children: [
             const Text("로그아웃"),
             OutlinedButton(
-              onPressed: () { setSignIn(false, null); },
+              onPressed: onPressSignOutBtn,
               child: const Text("로그아웃"),
             )
           ],

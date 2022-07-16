@@ -40,7 +40,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   void _onPressSignUpBtn() {
     _showSignUpCompleteDialog(() {
-      Navigator.pop(context);
+      Navigator.popUntil(context, (route) => route.settings.name == "/signin");
     });
   }
 
