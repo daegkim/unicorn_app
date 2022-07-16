@@ -18,18 +18,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
     super.initState();
   }
 
-  Future<void> _showDialog() async { 
-    await showDialog(
+  void _showSignUpCompleteDialog(Function callback) { 
+    showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Alert Dialog title"),
-          content: const Text("Alert Dialog body"),
+          content: const Text("회원가입 완료!"),
           actions: <Widget>[ 
             TextButton(
-              child: const Text("Close"),
+              child: const Text("닫기"),
               onPressed: () {
-                Navigator.popUntil(context, (route) => route.isFirst);
+                Navigator.pop(context);
+                callback();
               },
             ),
           ],
@@ -38,8 +38,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
     );
   }
 
-  Future<void> _onPressSignUpBtn() async {
-    await _showDialog();
+  void _onPressSignUpBtn() {
+    _showSignUpCompleteDialog(() {
+      Navigator.pop(context);
+    });
   }
 
   @override
