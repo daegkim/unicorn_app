@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:unicorn_app/screens/home/pages/home_page.dart';
 import 'package:unicorn_app/screens/home/pages/my_profile_page.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -10,17 +11,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final List<Widget> _bodyWidgets = [
+  static const initialPage = 1;
+  int _currentBottomNavBarIndex = initialPage;
+  final List<Widget> _bodyWidgets = [
     const Text('Search'),
-    const Text('Home'),
+    const HomePage(),
     const MyProfilePage(),
   ];
-
-  int _currentBottomNavBarIndex = 1;
+  final _pageController = PageController(initialPage: initialPage);
   
   @override
   void initState() {
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _pageController.dispose();
   }
 
   @override
@@ -46,10 +54,17 @@ class _HomeScreenState extends State<HomeScreen> {
         ],
         currentIndex: _currentBottomNavBarIndex,
         onTap: (int selectedIndex) {
-          setState(() => _currentBottomNavBarIndex = selectedIndex);
+          setState(() {
+            _currentBottomNavBarIndex = selectedIndex;
+            _pageController.jumpToPage(selectedIndex);
+          });
         },
       ),
-      body: _bodyWidgets[_currentBottomNavBarIndex]
+      body: PageView(
+        controller: _pageController,
+        physics: const NeverScrollableScrollPhysics(),
+        children: _bodyWidgets,
+      )
     );
   }
 }
