@@ -24,21 +24,19 @@ class _MyProfilePageState extends State<MyProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return (
-      SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text("로그아웃"),
-            OutlinedButton(
-              onPressed: onPressSignOutBtn,
-              child: const Text("로그아웃"),
-            )
-          ],
-        ),
-      )
+    return SizedBox(
+      width: double.infinity,
+      height: double.infinity,
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Text("로그아웃"),
+          OutlinedButton(
+            onPressed: onPressSignOutBtn,
+            child: const Text("로그아웃"),
+          )
+        ],
+      ),
     );
   }
 }

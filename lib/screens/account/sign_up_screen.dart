@@ -28,7 +28,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
             TextButton(
               child: const Text("닫기"),
               onPressed: () {
-                Navigator.pop(context);
                 callback();
               },
             ),
