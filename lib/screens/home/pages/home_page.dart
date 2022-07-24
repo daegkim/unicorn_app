@@ -14,13 +14,20 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
   bool isMoreLoading = false;
 
   void addData() {
+    /**
+     * setState를 사용하면 에러가 발생함.
+     * 근데 사실 setState를 사용할 필요가 없음.
+     * 얘를 통해서 렌더링을 새롭게 할 것이 아니기 때문
+     */
+    isMoreLoading = true;
     Future.delayed(const Duration(seconds: 2), () {
       int dataLength = data.length;
-      for (int i = dataLength; i < dataLength + 5; i++) {
+      for (int i = dataLength; i < dataLength + 10; i++) {
         data.add(i);
       }
       if(mounted) {
         setState(() => data = data);
+        isMoreLoading = false;
       }
     });
   }
@@ -30,27 +37,36 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
     super.build(context);
 
     double width = MediaQuery.of(context).size.width;
-    return SizedBox(
-      width: double.infinity,
-      height: double.infinity,
-      child: ListView.builder(
-        itemCount: data.length + 1,
-        itemBuilder: (context, index) {
-          if (index >= data.length) {
-            addData();  
-            return Container(
-              width: double.infinity,
-              alignment: Alignment.center,
-              child: const Text("Loading..."),
-            );
-          }
-          return HomeListViewItemWidget(
-            color: index % 2 == 0 ? Colors.amber : Colors.blueGrey,
-            width: width,
-            item: data[index],
+    return ListView.builder(
+      itemCount: data.length + 1,
+      itemBuilder: (context, index) {
+        if (index >= data.length) {
+          addData();  
+          return Container(
+            width: double.infinity,
+            alignment: Alignment.center,
+            child: const Text("Loading..."),
           );
-        },
-      ),
+        }
+        if (index % 2 == 0) {
+          return Row(
+            children: [
+              HomeListViewItemWidget(
+                data: data,
+                index: index,
+                width: width/2,
+              ),
+              HomeListViewItemWidget(
+                data: data,
+                index: index + 1,
+                width: width/2,
+              ),
+            ],
+          );
+        } else {
+          return const SizedBox.shrink();
+        }
+      },
     );
   }
   
@@ -59,28 +75,37 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin<
 }
 
 class HomeListViewItemWidget extends StatelessWidget {
-  final MaterialColor color;
-  final int item;
+  final List<int> data;
+  final int index;
   final double width;
-  const HomeListViewItemWidget({Key? key, required this.color, required this.item, required this.width}) : super(key: key);
+  const HomeListViewItemWidget({Key? key, required this.data, required this.index, required this.width}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    String imgUrl = "https://media.istockphoto.com/vectors/unicorn-face-cute-clipart-vector-isolated-vector-id1206701951?k=20&m=1206701951&s=612x612&w=0&h=4epRJsFRmaoqcxjzgAD3tR8HvxFukBoRGr50xIoipnw=";
-    return SizedBox(
-      width: double.infinity,
+    return GestureDetector(
+      onTap: () {
+        Navigator.pushNamed(context, "/itemDetail", 
+          arguments: {
+            "data": data,
+            "selectedIndex": index,
+          }
+        );
+      },
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(
+          Container(
             width: width,
             height: width,
-            child: Image.network(imgUrl),
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                image: NetworkImage("https://newsimg.sedaily.com/2017/04/18/1OEP2BWRPS_1.gif"),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
-          Text(item.toString()),
+          Text(data[index].toString())
         ],
-      )
+      ),
     );
   }
-  
 }

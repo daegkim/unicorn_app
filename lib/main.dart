@@ -4,6 +4,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:unicorn_app/screens/home/home_screen.dart';
 import 'package:unicorn_app/screens/account/sign_in_screen.dart';
+import 'package:unicorn_app/screens/home/item_detail_screen.dart';
 
 bool isSignedIn = false;
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       routes: {
         "/home": (context) => const HomeScreen(),
         "/signin": (context) => const SignInScreen(),
+        "/itemDetail": (context) => const ItemDetailScreen(),
       },
     );
   }
